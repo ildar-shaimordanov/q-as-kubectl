@@ -1,3 +1,25 @@
+<!-- toc-begin -->
+# Table of Content
+* [SYNOPSIS](#synopsis)
+* [DESCRIPTION](#description)
+  * [Terminology](#terminology)
+* [USAGE](#usage)
+* [FUNCTIONS](#functions)
+  * [`q`](#q)
+  * [`qq`](#qq)
+  * [Examples](#examples)
+* [ENVIRONMENT](#environment)
+  * [DECK variables](#deck-variables)
+    * [`Q_CONFIG`](#q_config)
+    * [`Q_CTX`](#q_ctx)
+    * [`Q_NS`](#q_ns)
+  * [SEL variables](#sel-variables)
+    * [`Q_SEL`](#q_sel)
+  * [Other variables](#other-variables)
+    * [`Q_DEBUG`](#q_debug)
+* [LICENSE](#license)
+<!-- toc-end -->
+
 # SYNOPSIS
 
     q DECK [SEL] [watch|...]
