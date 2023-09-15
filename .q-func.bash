@@ -37,20 +37,20 @@ q() {
 
 	# The pointer to the next parameter following the mandatory DECK
 	# and the optional SEL.
-	local k_next=2
+	local q_next=2
 
 	# q DECK SEL ...
 	# kubectl --context=CTX --namespace=NS --selector=SELECTOR ...
 	[ -n "$2" ] && [ "$2" != "watch" ] && [ -n "${Q_SEL[$2]}" ] \
-	&& k_next=3 \
+	&& q_next=3 \
 	&& set -- "$1" --selector="${Q_SEL[$2]}" "${@:3}"
 
-	if [ $# -lt $k_next ]
+	if [ $# -lt $q_next ]
 	then
 		# q DECK [SEL]
 		# kubectl DECK [SEL] get pods
 		set -- "$@" get pods
-	elif [ $# -eq $k_next ] && [ "${@:$#}" = "watch" ]
+	elif [ $# -eq $q_next ] && [ "${@:$#}" = "watch" ]
 	then
 		# q DECK [SEL] watch
 		# kubectl DECK [SEL] get pods --watch
