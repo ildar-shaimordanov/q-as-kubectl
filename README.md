@@ -36,22 +36,24 @@ The current project doesn't bring something revolutionarily new. It gives you ye
 
 Keeping use a marine terminology, let's introduce two new words.
 
-The commands are addressed to squads or the whole crew and executed on their basic places. The routine commands are short as less as possible, some routine commands can have additional options and others can be more or less extended.
+The commands are addressed to squads or the whole crew and executed on decks, their basic places. The routine commands are short as less as possible, some routine commands can have additional options and others can be more or less extended.
 
-*DECK* is the place where something happens and is executed. It can consist of few things. Reverting to the more convenient words, there are kubeconfig file, context and namespace.
+*DECK* is a place where something happens and is executed. It can consist of few things. Reverting to the more convenient words, there are kubeconfig file, context and namespace.
 
-*SQUAD* is the team executing commands which can be routine or some special. Again in k8s words, squad is selector.
+*SQUAD* is a team executing commands which can be routine or some special. Again in k8s words, squad is a selector.
 
 # USAGE
 
-Source the scripts in `.bashrc` or your script as follows:
+There are two files. Source them in your `.bashrc` or your script as follows:
 
     [ -f ~/.q-decl.bash ] && . ~/.q-decl.bash
     [ -f ~/.q-func.bash ] && . ~/.q-func.bash
 
-The first file contains series of definitions for SQUAD and DECK. The second file declares the functions.
+The first file contains series of definitions for SQUAD and DECK. It's just template file. You can modify it for your needs.
 
-Also you would like to add the following commands into your `.bashrc`.
+The second file declares the functions that you will use.
+
+Also you would like to enable a command completion adding the following commands into your `.bashrc`.
 
     complete -F __start_kubectl q
     complete -F __start_kubectl qq
@@ -62,7 +64,7 @@ There are two bash functions: the one is to see what will be executed and the an
 
 ## `q`
 
-Execute the command
+Execute a command
 
     q DECK [SQUAD] [watch|...]
 
@@ -88,7 +90,7 @@ Common use: do something
         [--selector=SELECTOR] \
         ...
 
-Show pods
+Special use 1: show pods
 
     q DECK [SQUAD]
     kubectl \
@@ -96,7 +98,7 @@ Show pods
         [--selector=SELECTOR] \
         get pods
 
-Show pods in the watch mode
+Special use 2: show pods in the watch mode
 
     q DECK [SQUAD] watch
     kubectl \
