@@ -13,8 +13,8 @@
     * [`Q_CONFIG`](#q_config)
     * [`Q_CTX`](#q_ctx)
     * [`Q_NS`](#q_ns)
-  * [SEL variables](#sel-variables)
-    * [`Q_SEL`](#q_sel)
+  * [SQUAD variables](#squad-variables)
+    * [`Q_SQUAD`](#q_squad)
   * [Other variables](#other-variables)
     * [`Q_DEBUG`](#q_debug)
 * [LICENSE](#license)
@@ -22,7 +22,7 @@
 
 # SYNOPSIS
 
-    q DECK [SEL] [watch|...]
+    q DECK [SQUAD] [watch|...]
 
 # DESCRIPTION
 
@@ -34,9 +34,13 @@ The current project doesn't bring something revolutionarily new. It gives you ye
 
 ## Terminology
 
-*SEL* is the shorthand for selector, well-known term in k8s. The selector itself can be too long and is not convenient to remember. Technically, SEL is defined as a key for the selector value and stored in the special environment variable.
+Keeping use a marine terminology, let's introduce two new words.
 
-*DECK* is new word. It stands as a combination for a configuration file, context and namespace. It is stored as three separate variables similar to SEL.
+The commands are addressed to squads or the whole crew and executed on their basic places. The routine commands are short as less as possible, some routine commands can have additional options and others can be more or less extended.
+
+*DECK* is the place where something happens and is executed. It can consist of few things. Reverting to the more convenient words, there are kubeconfig file, context and namespace.
+
+*SQUAD* is the team executing commands which can be routine or some special. Again in k8s words, squad is selector.
 
 # USAGE
 
@@ -45,7 +49,7 @@ Source the scripts in `.bashrc` or your script as follows:
     [ -f ~/.q-decl.bash ] && . ~/.q-decl.bash
     [ -f ~/.q-func.bash ] && . ~/.q-func.bash
 
-The first file contains series of definitions for SEL and DECK. The second file declares the functions.
+The first file contains series of definitions for SQUAD and DECK. The second file declares the functions.
 
 Also you would like to add the following commands into your `.bashrc`.
 
@@ -60,13 +64,13 @@ There are two bash functions: the one is to see what will be executed and the an
 
 Execute the command
 
-    q DECK [SEL] [watch|...]
+    q DECK [SQUAD] [watch|...]
 
 ## `qq`
 
 Show what is expected to be executed
 
-    qq DECK [SEL] [watch|...]
+    qq DECK [SQUAD] [watch|...]
 
 There are few cases when some parameters are missing and what does it mean.
 
@@ -78,7 +82,7 @@ Everything written for `q` is true for `qq` as well.
 
 Common use: do something
 
-    q DECK [SEL} ...
+    q DECK [SQUAD} ...
     kubectl \
         [--kubeconfig=CONFIG] [--context=CTX] [--namespace=NS] \
         [--selector=SELECTOR] \
@@ -86,7 +90,7 @@ Common use: do something
 
 Show pods
 
-    q DECK [SEL]
+    q DECK [SQUAD]
     kubectl \
         [--kubeconfig=CONFIG] [--context=CTX] [--namespace=NS] \
         [--selector=SELECTOR] \
@@ -94,7 +98,7 @@ Show pods
 
 Show pods in the watch mode
 
-    q DECK [SEL] watch
+    q DECK [SQUAD] watch
     kubectl \
         [--kubeconfig=CONFIG] [--context=CTX] [--namespace=NS] \
         [--selector=SELECTOR] \
@@ -118,11 +122,15 @@ The same as above but for the contexts.
 
 The same as above but for the namespaces.
 
-## SEL variables
+## SQUAD variables
 
-### `Q_SEL`
+### `Q_SQUAD`
 
 The associative array for the selectors with the keys as the selector short names and the values as the selectors itself.
+
+The `Q_SQUAD` variable doesn't support the special `[?]` key.
+
+The `watch` word is reserved for the special command and cannot be used as a squad name.
 
 ## Other variables
 

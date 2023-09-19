@@ -15,45 +15,55 @@ qq() {
 
 q() {
 	[ $# -gt 0 ] || {
-		echo "Usage: q DECK [SEL] [watch|...]"
+		echo "Usage: q DECK [SQUAD] [watch|...]"
 		return
 	}
+
+	# DECK validation
 
 	: "${1:?Deck name required}"
 
 	local cfg
 	local ctx
 	local ns
-	local sel
 
 	declare -p Q_CONFIG >/dev/null 2>&1 \
+	&& [ -n "${!Q_CONFIG[*]}" ] \
 	&& : "${cfg:=${Q_CONFIG[$1]-${Q_CONFIG[?]?Bad deck: $1}}}"
 
 	declare -p Q_CTX >/dev/null 2>&1 \
+	&& [ -n "${!Q_CTX[*]}" ] \
 	&& : "${ctx=${Q_CTX[$1]-${Q_CTX[?]?Bad deck: $1}}}"
 
 	declare -p Q_NS >/dev/null 2>&1 \
+	&& [ -n "${!Q_NS[*]}" ] \
 	&& : "${ns=${Q_NS[$1]-${Q_NS[?]?Bad deck: $1}}}"
 
+	# SQUAD validation
+
+	local sel
+
 	# The pointer to the next parameter following the mandatory DECK
-	# and the optional SEL.
+	# and the optional SQUAD.
 	local q_next=2
 
-	# q DECK SEL ...
-	# kubectl --context=CTX --namespace=NS --selector=SELECTOR ...
+	# q DECK [SQUAD] ...
+	# kubectl DECK [SQUAD] ...
 	[ -n "$2" ] && [ "$2" != "watch" ] && [ -n "${Q_SEL[$2]}" ] \
 	&& q_next=3 \
 	&& set -- "$1" --selector="${Q_SEL[$2]}" "${@:3}"
 
 	if [ $# -lt $q_next ]
 	then
-		# q DECK [SEL]
-		# kubectl DECK [SEL] get pods
+		# Special use 1: show pods
+		# q DECK [SQUAD]
+		# kubectl DECK [SQUAD] get pods
 		set -- "$@" get pods
 	elif [ $# -eq $q_next ] && [ "${@:$#}" = "watch" ]
 	then
-		# q DECK [SEL] watch
-		# kubectl DECK [SEL] get pods --watch
+		# Special use 2: show pods in watch mode
+		# q DECK [SQUAD] watch
+		# kubectl DECK [SQUAD] get pods --watch
 		set -- "${@:1:$#-1}" get pods --watch
 	fi
 
