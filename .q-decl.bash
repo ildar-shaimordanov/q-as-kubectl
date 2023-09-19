@@ -83,6 +83,7 @@ declare -A Q_SEL=(
 	[backend]='app.kubernetes.io/name=backend'
 	[frontend]='app.kubernetes.io/name=frontend'
 	[java]='language=java'
+	[app]='app.kubernetes.io/name in (backend, frontend)'
 )
 
 # =========================================================================
