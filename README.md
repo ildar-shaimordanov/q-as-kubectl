@@ -14,7 +14,7 @@
     * [`Q_CTX`](#q_ctx)
     * [`Q_NS`](#q_ns)
   * [SQUAD variables](#squad-variables)
-    * [`Q_SQUAD`](#q_squad)
+    * [`Q_SEL`](#q_sel)
   * [Other variables](#other-variables)
     * [`Q_DEBUG`](#q_debug)
 * [LICENSE](#license)
@@ -124,11 +124,11 @@ The same as above but for the namespaces.
 
 ## SQUAD variables
 
-### `Q_SQUAD`
+### `Q_SEL`
 
 The associative array for the selectors with the keys as the selector short names and the values as the selectors itself.
 
-The `Q_SQUAD` variable doesn't support the special `[?]` key.
+The `Q_SEL` variable doesn't support the special `[?]` key.
 
 The `watch` word is reserved for the special command and cannot be used as a squad name.
 
