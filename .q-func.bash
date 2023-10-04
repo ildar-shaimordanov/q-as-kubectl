@@ -29,15 +29,23 @@ q() {
 
 	declare -p Q_CONFIG >/dev/null 2>&1 \
 	&& [ -n "${!Q_CONFIG[*]}" ] \
-	&& : "${cfg:=${Q_CONFIG[$1]-${Q_CONFIG[?]?Bad deck: $1}}}"
+	&& : "${cfg:=${Q_CONFIG[$1]-${Q_CONFIG[?]:?Bad deck: $1}}}"
 
 	declare -p Q_CTX >/dev/null 2>&1 \
 	&& [ -n "${!Q_CTX[*]}" ] \
-	&& : "${ctx=${Q_CTX[$1]-${Q_CTX[?]?Bad deck: $1}}}"
+	&& : "${ctx:=${Q_CTX[$1]-${Q_CTX[?]:?Bad deck: $1}}}"
 
 	declare -p Q_NS >/dev/null 2>&1 \
 	&& [ -n "${!Q_NS[*]}" ] \
-	&& : "${ns=${Q_NS[$1]-${Q_NS[?]?Bad deck: $1}}}"
+	&& : "${ns:=${Q_NS[$1]-${Q_NS[?]:?Bad deck: $1}}}"
+
+	[ -n "${cfg:+$cfg}" ] \
+	|| [ -n "${ctx:+$ctx}" ] \
+	|| [ -n "${ns:+$ns}" ] \
+	|| {
+		echo "None part is specified for DECK='$1'" >&2
+		return 1
+	}
 
 	# SQUAD validation
 
@@ -49,7 +57,11 @@ q() {
 
 	# q DECK [SQUAD] ...
 	# kubectl DECK [SQUAD] ...
-	[ -n "$2" ] && [ "$2" != "watch" ] && [ -n "${Q_SEL[$2]}" ] \
+	[ $# -ge 2 ] \
+	&& [ -n "$2" ] \
+	&& [ "$2" != "watch" ] \
+	&& declare -p Q_SEL >/dev/null 2>&1 \
+	&& [ -n "${Q_SEL[$2]:+${Q_SEL[$2]}}" ] \
 	&& q_next=3 \
 	&& set -- "$1" --selector="${Q_SEL[$2]}" "${@:3}"
 
