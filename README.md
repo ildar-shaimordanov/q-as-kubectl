@@ -3,20 +3,19 @@
 * [SYNOPSIS](#synopsis)
 * [DESCRIPTION](#description)
   * [Terminology](#terminology)
+* [REQUIREMENTS](#requirements)
 * [USAGE](#usage)
 * [FUNCTIONS](#functions)
   * [`q`](#q)
   * [`qq`](#qq)
+  * [`qcheck`](#qcheck)
   * [Examples](#examples)
 * [ENVIRONMENT](#environment)
-  * [DECK variables](#deck-variables)
-    * [`Q_CONFIG`](#q_config)
-    * [`Q_CTX`](#q_ctx)
-    * [`Q_NS`](#q_ns)
-  * [SQUAD variables](#squad-variables)
-    * [`Q_SEL`](#q_sel)
+  * [`Q_DECK` variable](#q_deck-variable)
+  * [`Q_SQUAD` variable](#q_squad-variable)
   * [Other variables](#other-variables)
     * [`Q_DEBUG`](#q_debug)
+* [SEE ALSO](#see-also)
 * [LICENSE](#license)
 <!-- toc-end -->
 
@@ -42,25 +41,36 @@ The commands are addressed to squads or the whole crew and executed on decks, th
 
 *SQUAD* is a team executing commands which can be routine or some special. Again in k8s words, squad is a selector.
 
+# REQUIREMENTS
+
+All this stuff was developed under Cygwin 3.1.7. Further it was tested under modern but not last Linux.
+
+* GNU Bash 4+
+* GNU Awk 5+
+
 # USAGE
 
-There are two files. Source them in your `.bashrc` or your script as follows:
+Source these files in your `~/.bashrc` file:
 
     [ -f ~/.q-decl.bash ] && . ~/.q-decl.bash
     [ -f ~/.q-func.bash ] && . ~/.q-func.bash
 
-The first file contains series of definitions for SQUAD and DECK. It's just template file. You can modify it for your needs.
-
-The second file declares the functions that you will use.
+The first file contains series of definitions for SQUAD and DECK. The second file declares the functions that you will use.
 
 Also you would like to enable a command completion adding the following commands into your `.bashrc`.
 
     complete -F __start_kubectl q
     complete -F __start_kubectl qq
 
+In addition there is `qcheck` function giving you another way to declare your decks and squads. Just edit the file `~/.q-decl.ini` following the given recommendations as you need and run the command:
+
+    qcheck -u
+
+Specifying another file you can alternate an input file.
+
 # FUNCTIONS
 
-There are two bash functions: the one is to see what will be executed and the another one is to execute commands. Everything you need is configured in special environment variables once and used a lot.
+There are three bash functions: the one is to see what will be executed and the another one is to execute commands. Everything you need is configured in special environment variables once and used a lot. The last one is used to check and redeclare settings.
 
 ## `q`
 
@@ -74,9 +84,18 @@ Show what is expected to be executed
 
     qq DECK [SQUAD] [watch|...]
 
-There are few cases when some parameters are missing and what does it mean.
+## `qcheck`
+
+Parse a given file (or `~/.q-decl.ini`, if nothing specified) and update settings with the `-u` option writing results to `~/.q-decl.bash`.
+
+Be careful using this function. It overwrites your settings added manually.
+
+    qcheck [-u] [FILE]
+
 
 ## Examples
+
+There are few cases when some parameters are missing and what does it mean.
 
 Each example below consists of two parts: the first line is the command to be typed and the rest of the example is the command which will be really executed. Optional or omitted parameters are shown in the square brackets.
 
@@ -86,7 +105,7 @@ Common use: do something
 
     q DECK [SQUAD} ...
     kubectl \
-        [--kubeconfig=CONFIG] [--context=CTX] [--namespace=NS] \
+        [--kubeconfig=CONFIG] [--context=CONTEXT] [--namespace=NAMESPACE] \
         [--selector=SELECTOR] \
         ...
 
@@ -94,7 +113,7 @@ Special use 1: show pods
 
     q DECK [SQUAD]
     kubectl \
-        [--kubeconfig=CONFIG] [--context=CTX] [--namespace=NS] \
+        [--kubeconfig=CONFIG] [--context=CONTEXT] [--namespace=NAMESPACE] \
         [--selector=SELECTOR] \
         get pods
 
@@ -102,43 +121,47 @@ Special use 2: show pods in the watch mode
 
     q DECK [SQUAD] watch
     kubectl \
-        [--kubeconfig=CONFIG] [--context=CTX] [--namespace=NS] \
+        [--kubeconfig=CONFIG] [--context=CONTEXT] [--namespace=NAMESPACE] \
         [--selector=SELECTOR] \
         get pods --watch
 
 # ENVIRONMENT
 
-## DECK variables
+## `Q_DECK` variable
 
-DECK variables may have the special key `[?]` implying any deck name, when the typed deck name is not presented.
+The `Q_DECK` variable describes the place where kubectl commands is supposed to be executed. In its guts, it is the associative array in the very common form:
 
-### `Q_CONFIG`
+    declare -A Q_DECK=(
+        [name/key]=value
+    )
 
-The associative array for the kubeconfig files with the keys as the deck names and the values as the kubeconfig files.
+where `name` stands for a deck name, `key` is one of `config`, `context` and `namespace` and `value` is something for `--kubeconfig`, `--context` and `--namespace` options, respectively.
 
-### `Q_CTX`
+## `Q_SQUAD` variable
 
-The same as above but for the contexts.
+The `Q_SQUAD` variable is simpler than `Q_DECK`. Generally, it has the following form:
 
-### `Q_NS`
+    declare -A Q_SQUAD=(
+        [key]=value
+    )
 
-The same as above but for the namespaces.
+with `key` as a squad name and `value` as a value for a `--selector` option.
 
-## SQUAD variables
-
-### `Q_SEL`
-
-The associative array for the selectors with the keys as the selector short names and the values as the selectors itself.
-
-The `Q_SEL` variable doesn't support the special `[?]` key.
-
-The `watch` word is reserved for the special command and cannot be used as a squad name.
+**NOTE**: The `watch` word is reserved for the special command and cannot be used as the squad name.
 
 ## Other variables
 
 ### `Q_DEBUG`
 
 Any non-empty value means to show the command, not to execute. It is internally used variable. You don't need to set it explicitly. Instead, use `qq`.
+
+# SEE ALSO
+
+Probably some of the projects below could have some relationship to this project.
+
+* https://github.com/Dbz/kube-aliases
+* https://github.com/aabouzaid/kubech
+* https://github.com/ahmetb/kubectx
 
 # LICENSE
 
