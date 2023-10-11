@@ -178,9 +178,10 @@ what == "squad" {
 
 # Finalize
 
-function print_decl(name, values,    p) {
+function print_decl(name, values,    d, n, i) {
 	printf "\ndeclare -A Q_%s=(\n", name;
-	for (p in values) printf "  [%s]=\"%s\"\n", p, values[p];
+	n = asorti(values, d);
+	for (i = 1; i <= n; i++) printf "  [%s]=\"%s\"\n", d[i], values[ d[i] ];
 	printf ")\n";
 }
 
