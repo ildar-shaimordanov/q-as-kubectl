@@ -15,7 +15,7 @@ declare -A Q_DECK=(
 )
 
 declare -A Q_SQUAD=(
-  [app]="app.kubernetes.io/name || in (backend, frontend)"
+  [app]="app.kubernetes.io/name in (backend, frontend)"
   [backend]="app.kubernetes.io/name=backend"
   [frontend]="app.kubernetes.io/name=frontend"
   [java]="language=java"
