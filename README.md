@@ -45,8 +45,8 @@ The commands are addressed to squads or the whole crew and executed on decks, th
 
 All this stuff was developed under Cygwin 3.1.7. Further it was probed with success under modern Linux shipped with GNU Awk 4.0.2 and GNU Bash 4.2.46. Everything is working fine as expected.
 
-* GNU Bash 4+
-* GNU Awk 5+
+* GNU Bash 4+ (mandatory)
+* GNU Awk 5+ (optional; it's required, if you plan using `qcheck`)
 
 # USAGE
 
