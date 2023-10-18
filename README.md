@@ -15,6 +15,7 @@
   * [`Q_SQUAD` variable](#q_squad-variable)
   * [Other variables](#other-variables)
     * [`Q_DEBUG`](#q_debug)
+    * [`Q_PUT_NAME_FIRST_THEN_OPTIONS`](#q_put_name_first_then_options)
 * [SEE ALSO](#see-also)
 * [LICENSE](#license)
 <!-- toc-end -->
@@ -154,6 +155,25 @@ with `key` as a squad name and `value` as a value for a `--selector` option.
 ### `Q_DEBUG`
 
 Any non-empty value means to show the command, not to execute. It is internally used variable. You don't need to set it explicitly. Instead, use `qq`.
+
+### `Q_PUT_NAME_FIRST_THEN_OPTIONS`
+
+Options are allowed before kubectl builtin commands only. In the cases when the options precede a plugin name, they are immediately declined with error.
+
+If this variable is set to any non-empty value, you can change the final order of kubectl arguments.
+
+The following example will produce an error:
+
+    q prod foo --bar
+    kubectl --context=prod-ctx foo --bar
+
+Whereas the next one allows you to reorder arguments:
+
+    Q_PUT_NAME_FIRST_THEN_OPTIONS=1
+    q prod foo --bar
+    kubectl foo --context=prod-ctx --bar
+
+**NOTE**: This feature is experimental and doesn't guarantee that some plugin will support deck and squad options.
 
 # SEE ALSO
 

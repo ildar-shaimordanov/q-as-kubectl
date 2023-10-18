@@ -85,7 +85,29 @@ q() {
 		set -- get pods --watch
 	fi
 
+	# One more trick for commands or plugins
+	# q DECK [SQUAD] CMD [...]
+	# kubectl CMD DECK [SQUAD] [...]
+
+	# Options are allowed before kubectl builtin commands only. In
+	# the cases when the options precede a plugin name, they are
+	# immediately declined with error. Let's become a bit friendly
+	# and make it configurable: enable putting the deck and squad
+	# options after the first argument if it looks like a command or
+	# plugin name - a string is not empty and not starting with the
+	# "-" dash symbol.
+
+	local cmd
+
+	[ "${Q_PUT_NAME_FIRST_THEN_OPTIONS:+ok}" ] \
+	&& [[ ! "$1" =~ ^- ]] \
+	&& cmd="$1" \
+	&& shift
+
+	# That's the final step now -- constructing the command.
+
 	set -- kubectl \
+	${cmd:+"$cmd"} \
 	${cfg:+--kubeconfig="$cfg"} \
 	${ctx:+--context="$ctx"} \
 	${nsp:+--namespace="$nsp"} \
