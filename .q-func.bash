@@ -158,7 +158,7 @@ qcheck() {
 
 # Check sections
 
-match($0, /^\[deck\/(\?|[a-zA-Z_][a-zA-Z0-9_-]*)\]/, m) {
+match($0, /^\[deck\/(\?|\w+)\]/, m) {
 	what = "deck";
 	name = m[1];
 	next;
@@ -179,6 +179,7 @@ $0 == "[squad]" {
 match($0, /^(\w+)\s*=\s*("(.*)"|(.*))/, m) {
 	key = m[1];
 	val = m[3] m[4];
+	gsub(/\\/, "\\\\", val);
 	gsub(/"/, "\\\"", val);
 }
 

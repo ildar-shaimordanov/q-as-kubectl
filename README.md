@@ -42,6 +42,8 @@ The commands are addressed to squads or the whole crew and executed on decks, th
 
 *SQUAD* is a team executing commands which can be routine or some special. Again in k8s words, squad is a selector.
 
+Both DECK and SQUAD have names. A name is a non-empty string consisting of Latin characters, digits and underscore.
+
 # REQUIREMENTS
 
 All this stuff was developed under Cygwin 3.1.7. Further it was probed with success under modern Linux shipped with GNU Awk 4.0.2 and GNU Bash 4.2.46. Everything is working fine as expected.
