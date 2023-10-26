@@ -129,9 +129,31 @@ q() {
 # =========================================================================
 
 qcheck() {
-	[ "${1+$1}" = "-u" ] && {
-		shift
+	local qedit=''
+	local qupdate=''
 
+	local OPTIND=1
+	local qarg
+	while getopts ':eu' qarg
+	do
+		case "$qarg" in
+		e ) qedit=1 ;;
+		u ) qupdate=1 ;;
+		* ) echo "Illegal option -- $OPTARG" >&2 ; return $? ;;
+		esac
+	done
+
+	shift $(( OPTIND-1 ))
+
+	[ $# -eq 0 ] \
+	&& set -- ~/.q-decl.ini
+
+	[ -n "$qedit" ] && {
+		"${Q_EDITOR:-${EDITOR:-vi}}" "$@" \
+		|| return $?
+	}
+
+	[ -n "$qupdate" ] && {
 		local qdecl
 
 		# shellcheck disable=SC1090
@@ -142,10 +164,6 @@ qcheck() {
 
 		return $?
 	}
-
-	[ $# -eq 0 ] \
-	&& [ -t 0 ] \
-	&& set -- ~/.q-decl.ini
 
 	awk '
 # Trim whitespaces, skip empty lines and comments

@@ -15,6 +15,7 @@
   * [`Q_SQUAD` variable](#q_squad-variable)
   * [Other variables](#other-variables)
     * [`Q_DEBUG`](#q_debug)
+    * [`Q_EDITOR`](#q_editor)
     * [`Q_PUT_NAME_FIRST_THEN_OPTIONS`](#q_put_name_first_then_options)
 * [SEE ALSO](#see-also)
 * [LICENSE](#license)
@@ -65,7 +66,7 @@ Also you would like to enable a command completion adding the following commands
     complete -F __start_kubectl q
     complete -F __start_kubectl qq
 
-In addition there is `qcheck` function giving you another way to declare your decks and squads. Just edit the file `~/.q-decl.ini` following the given recommendations as you need and run the command:
+In addition there is `qcheck` function giving you another way to declare your stuff: decks and squads. Just edit the file `~/.q-decl.ini` following the given recommendations as you need and run the command:
 
     qcheck -u
 
@@ -89,12 +90,16 @@ Show what is expected to be executed
 
 ## `qcheck`
 
-Parse a given file (or `~/.q-decl.ini`, if nothing specified) and update settings with the `-u` option writing results to `~/.q-decl.bash`.
+Edit, parse and check a given file (or `~/.q-decl.ini`, if nothing else specified) and update settings writing results to the `~/.q-decl.bash` file.
 
 Be careful using this function. It overwrites your settings added manually.
 
-    qcheck [-u] [FILE]
+    qcheck [OPTIONS] [FILE]
 
+where
+
+* `-e` for editing the file with help of `$Q_DEITOR`, `$EDITOR` or `vi`
+* `-u` for updating the `~/.q-decl.bash` file
 
 ## Examples
 
@@ -157,6 +162,10 @@ with `key` as a squad name and `value` as a value for a `--selector` option.
 ### `Q_DEBUG`
 
 Any non-empty value means to show the command, not to execute. It is internally used variable. You don't need to set it explicitly. Instead, use `qq`.
+
+### `Q_EDITOR`
+
+This environment variable is used by `qcheck -e` and overrides `$EDITOR`. If not specified the `$EDITOR` is used or `vi`.
 
 ### `Q_PUT_NAME_FIRST_THEN_OPTIONS`
 
