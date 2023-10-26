@@ -165,7 +165,7 @@ Any non-empty value means to show the command, not to execute. It is internally 
 
 ### `Q_EDITOR`
 
-This environment variable is used by `qcheck -e` and overrides `$EDITOR`. If not specified the `$EDITOR` is used or `vi`.
+This environment variable is used by `qcheck -e` and overrides `$EDITOR`. If the variable is not specified, the `$EDITOR` is used, otherwise `vi`.
 
 ### `Q_PUT_NAME_FIRST_THEN_OPTIONS`
 
