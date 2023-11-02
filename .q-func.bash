@@ -139,7 +139,7 @@ qcheck() {
 		case "$qarg" in
 		e ) qedit=1 ;;
 		u ) qupdate=1 ;;
-		* ) echo "Illegal option -- $OPTARG" >&2 ; return $? ;;
+		* ) echo "Illegal option -- $OPTARG" >&2 ; return 1 ;;
 		esac
 	done
 
