@@ -2,7 +2,7 @@
 #
 # q as kubectl
 #
-# Copyright 2023 Ildar Shaimordanov
+# Copyright 2024 Ildar Shaimordanov
 # MIT License
 #
 # =========================================================================
@@ -15,7 +15,7 @@ qq() {
 
 q() {
 	[ $# -gt 0 ] || {
-		echo "Usage: q DECK [SQUAD] [watch|...]" >&2
+		echo "Usage: q DECK [SQUAD] [watch|names|...]" >&2
 		return 1
 	}
 
@@ -64,6 +64,7 @@ q() {
 
 	[ -n "${1+ok}" ] \
 	&& [ "$1" != "watch" ] \
+	&& [ "$1" != "names" ] \
 	&& declare -p Q_SQUAD >/dev/null 2>&1 \
 	&& [ -n "${Q_SQUAD[$1]+ok}" ] \
 	&& sel="${Q_SQUAD[$1]}" \
@@ -83,6 +84,12 @@ q() {
 		# q DECK [SQUAD] watch
 		# kubectl DECK [SQUAD] get pods --watch
 		set -- get pods --watch
+	elif [ $# -eq 1 ] && [ "$1" = "names" ]
+	then
+		# The special use 3: show pod names
+		# q DECK [SQUAD] names
+		# kubectl DECK [SQUAD] get pods -o jsonpath=...
+		set -- get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}'
 	fi
 
 	# One more trick for commands or plugins
@@ -246,3 +253,4 @@ END {
 # =========================================================================
 
 # EOF
+

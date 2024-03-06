@@ -80,13 +80,13 @@ There are three bash functions: the one is to see what will be executed and the 
 
 Execute a command
 
-    q DECK [SQUAD] [watch|...]
+    q DECK [SQUAD] [watch|names|...]
 
 ## `qq`
 
 Show what is expected to be executed
 
-    qq DECK [SQUAD] [watch|...]
+    qq DECK [SQUAD] [watch|names|...]
 
 ## `qcheck`
 
@@ -132,6 +132,14 @@ Special use 2: show pods in the watch mode
         [--kubeconfig=CONFIG] [--context=CONTEXT] [--namespace=NAMESPACE] \
         [--selector=SELECTOR] \
         get pods --watch
+
+Special use 3: show pod names
+
+    q DECK [SQUAD] names
+    kubectl \
+        [--kubeconfig=CONFIG] [--context=CONTEXT] [--namespace=NAMESPACE] \
+        [--selector=SELECTOR] \
+        get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}'
 
 # ENVIRONMENT
 
