@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+# =========================================================================
+#
+# Begins streaming the logs per each kubernetes pod independently and
+# collects them to separate files. Filters particular log entries out
+# before storing them, if needs.
+#
+# Copyright (C) 2024 Ildar Shaimordanov
+# MIT License
+#
+# =========================================================================
+
+. ~/.q-func.bash
+. ~/.q-decl.bash
+
+pods=( $( q prod backend names ) )
+
+[ ${#pods[@]} -gt 0 ] || {
+	echo "No pods found" >&2
+	exit 1
+}
+
+logger='. ~/.q-func.bash ; . ~/.q-decl.bash ; q prod logs "X" -f'
+[ $# -gt 0 ] && logger="$logger"' | grep "$@"'
+logger="$logger"' | tee "X.log"'
+
+printf '%s\n' "${pods[@]}" \
+| xargs -P "${#pods[@]}" -r -IX bash \
+-c "$logger" - "$@"
+
+# =========================================================================
+
+# EOF
