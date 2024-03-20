@@ -51,6 +51,7 @@ All this stuff was developed under Cygwin 3.1.7. Further it was probed with succ
 
 * GNU Bash 4+ (mandatory)
 * GNU Awk 4+ (optional; it's required, if you are going to use `qcheck`)
+* Editor, any of Vi, Nano or something else (optional; it's required with `qcheck -e`)
 
 # USAGE
 
